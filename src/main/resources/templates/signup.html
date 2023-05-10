@@ -12,46 +12,70 @@
 
             <div class="col-md-8 offset-md-2">
                 <div class="my-card mt-2">
+                    <div th:if="${session.message}" th:classappend="session.message.type" class="alert " role="alert">
+                        <p class="text-center" th:text="${session.message.content}">
+                            <th:block th:text="${#session.removeAttribute('message')}"></th:block>
+
+
+                        </p>
+                    </div>
 
                     <div class="container text-center">
                         <img class="" style="width :80px;" src="" th:src="@{/image/customer.png}" alt=""/>
                     </div>
                     <h1 class="text-center">Register Here</h1>
-                    <form th:action="@{/do_register}" method="post">
+                    <form th:action="@{/do_register}" method="post" th:object="${user}">
 
 
                         <div class="form-group">
                             <label for="name_field">Your Name</label>
                             <input type="text"
+                                   name="name"
                                    class="form-control"
                                    id="name_field"
                                    aria-describedby="emailHelp"
                                    placeholder="Enter your name"
                                    required
+                                   th:value="${user.name}"
                             >
                         </div>
                         <div class="form-group">
                             <label for="email_field">Your Email</label>
                             <input type="email"
+                                   name="email"
                                    class="form-control"
                                    id="email_field"
                                    aria-describedby="emailHelp"
                                    placeholder="Enter your email here"
                                    required
+                                   th:value="${user.email}"
                             >
                         </div>
                         <div class="form-group">
                             <label for="password_field">Your Password</label>
                             <input type="password"
+                                   name="password"
                                    class="form-control"
                                    id="password_field"
                                    aria-describedby="emailHelp"
                                    placeholder="Please enter your password"
                                    required
                             >
+
+
+                            <div class="form-group form-check text-center">
+                                <input type="checkbox"
+                                       name="agreement"
+                                       class="form-check-post"
+                                       id="agreement"
+                                />
+                                <label for="agreement">Accept terms and conditions</label>
+
+
+                            </div>
                         </div>
                         <div class="form-group">
-                            <textarea rows="6" class="form-control"
+                            <textarea name="about" th:value="${user.about}" rows="6" class="form-control"
                                       placeholder="Enter something about yourself"></textarea>
                         </div>
                         <div class="container text-center">
