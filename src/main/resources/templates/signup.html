@@ -7,7 +7,63 @@
 </head>
 <body>
 <section>
-    <h1>This is Signup page</h1>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-8 offset-md-2">
+                <div class="my-card mt-2">
+
+                    <div class="container text-center">
+                        <img class="" style="width :80px;" src="" th:src="@{/image/customer.png}" alt=""/>
+                    </div>
+                    <h1 class="text-center">Register Here</h1>
+                    <form th:action="@{/do_register}" method="post">
+
+
+                        <div class="form-group">
+                            <label for="name_field">Your Name</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="name_field"
+                                   aria-describedby="emailHelp"
+                                   placeholder="Enter your name"
+                                   required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label for="email_field">Your Email</label>
+                            <input type="email"
+                                   class="form-control"
+                                   id="email_field"
+                                   aria-describedby="emailHelp"
+                                   placeholder="Enter your email here"
+                                   required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label for="password_field">Your Password</label>
+                            <input type="password"
+                                   class="form-control"
+                                   id="password_field"
+                                   aria-describedby="emailHelp"
+                                   placeholder="Please enter your password"
+                                   required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <textarea rows="6" class="form-control"
+                                      placeholder="Enter something about yourself"></textarea>
+                        </div>
+                        <div class="container text-center">
+                            <button class="btn bg-primary text-white" type="submit">Submit</button>
+                            <button class="btn btn-warning" type="reset">Reset</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 </body>
 </html>`
