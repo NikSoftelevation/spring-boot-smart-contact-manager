@@ -32,7 +32,11 @@ public class SecurityConfiguration {
                 .requestMatchers("/**")
                 .permitAll()
                 .and()
-                .formLogin();
+                .formLogin()
+                .loginPage("/signin")
+
+
+        ;
 
         return http.build();
     }
