@@ -8,4 +8,4 @@ import org.springframework.security.web.SecurityFilterChain;
 @org.springframework.context.annotation.Configuration
 public class Configuration {
 
-    }
+}
