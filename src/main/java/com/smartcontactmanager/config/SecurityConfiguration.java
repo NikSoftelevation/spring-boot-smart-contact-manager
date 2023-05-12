@@ -34,10 +34,8 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin()
                 .loginPage("/signin")
-
-
-        ;
-
+                .loginProcessingUrl("/dologin")
+                .defaultSuccessUrl("/user/index");
         return http.build();
     }
 
