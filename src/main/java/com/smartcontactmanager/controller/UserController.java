@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
@@ -48,6 +49,21 @@ public class UserController {
     public String openAddContactForm(Model model) {
         model.addAttribute("title", "Add Contact");
         model.addAttribute("contact", new Contact());
+        return "normal/add_contact_form";
+    }
+
+    //processing contact form
+    @PostMapping("/process-contact")
+    public String processContact(@ModelAttribute Contact contact, Principal principal) {
+
+        String name = principal.getName();
+
+        User user = userRepository.getUserByUserName(name);
+
+        user.getContacts().add(contact);
+
+        userRepository.save(user);
+
         return "normal/add_contact_form";
     }
 }
