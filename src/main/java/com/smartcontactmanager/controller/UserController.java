@@ -2,7 +2,9 @@ package com.smartcontactmanager.controller;
 
 import com.smartcontactmanager.domain.Contact;
 import com.smartcontactmanager.domain.User;
+import com.smartcontactmanager.helper.Message;
 import com.smartcontactmanager.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
@@ -58,7 +60,7 @@ public class UserController {
 
     //processing contact form
     @PostMapping("/process-contact")
-    public String processContact(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file, Principal principal) {
+    public String processContact(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file, Principal principal, HttpSession session) {
 
         try {
             String name = principal.getName();
@@ -82,12 +84,12 @@ public class UserController {
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
                 System.out.println("Image is uploaded");
             }
-
             user.getContacts().add(contact);
-
-
             userRepository.save(user);
+
+            session.setAttribute("message", new Message("Your Contact is added !", "success"));
         } catch (Exception e) {
+            session.setAttribute("message", new Message("Something went wrong ! Please try again", "danger"));
             System.out.println("ERROR " + e.getMessage());
             e.printStackTrace();
         }

@@ -55,10 +55,17 @@
 
 <div class="content mt-5">
     <i onclick="toggleSidebar()" class="fas fa-bars m-3"></i>
+
+    <!-- message box -->
+    <div th:if="${session.message}" class="container">
+        <div th:classappend="${'alert-'+session.message.type}" class="alert text-center" role="alert">
+            <span th:text="${session.message.content}"></span>
+        </div>
+
+        <th:block th:text="${#session.removeAttribute('message)}"></th:block>
+    </div>
     <div th:replace="${content}"></div>
-
 </div>
-
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
