@@ -35,6 +35,7 @@
                                        class="form-control"
                                        name="name"
                                        placeholder="Enter your name here"
+                                       required
                                 />
                             </div>
 
@@ -52,6 +53,7 @@
                                        class="form-control"
                                        name="secondName"
                                        placeholder="Enter your nickname"
+                                       required
                                 />
                             </div>
                             //phone field
@@ -68,7 +70,8 @@
                                        class="form-control"
                                        name="phone"
                                        placeholder="Enter your phone number"
-                                />
+                                       min="10" max="11"
+                                       required/>
                             </div>
                             //email field
                             <div class="input-group mt-3">
@@ -83,6 +86,8 @@
                                        class="form-control"
                                        name="email"
                                        placeholder="Enter your email"
+
+                                       required
                                 />
                             </div>
                             //work field
@@ -99,17 +104,17 @@
                                        class="form-control"
                                        name="work"
                                        placeholder="Enter your designation here"
-                                />
+                                       required/>
                             </div>
                             //description field
                             <div class="form-group mt-3">
-                                <textarea name="description" id="description" class="form-control" rows="10"
+                                <textarea name="description" id="mytextarea" class="form-control" rows="10"
                                           placeholder="Enter description of your contact"></textarea>
                             </div>
                             //image field
 
                             <div class="custom-file">
-                                <input type="file" name="image"/>
+                                <input required type="file" name="image"/>
                             </div>
                             <div class="container text-center">
                                 <button class="btn btn-outline-primary">Save Contact</button>
@@ -120,6 +125,13 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+        selector:#'mytextarea'
+        });
+
+    </script>
 </section>
 </body>
 </html>
