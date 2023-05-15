@@ -3,6 +3,7 @@ package com.smartcontactmanager.controller;
 import com.smartcontactmanager.domain.Contact;
 import com.smartcontactmanager.domain.User;
 import com.smartcontactmanager.helper.Message;
+import com.smartcontactmanager.repository.ContactRepository;
 import com.smartcontactmanager.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ContactRepository contactRepository;
 
     //method for adding common data
     @ModelAttribute
@@ -95,5 +99,21 @@ public class UserController {
         }
 
         return "normal/add_contact_form";
+    }
+
+    //show contacts
+    @GetMapping("/show-contacts")
+    public String showContacts(Model model, Principal principal) {
+        model.addAttribute("title", "Show User Contacts");
+
+        String userName = principal.getName();
+
+        User user = userRepository.getUserByUserName(userName);
+
+        List<Contact> contacts = contactRepository.findContactsByUser(user.getId());
+
+        model.addAttribute("contacts", contacts);
+
+        return "normal/show_contacts";
     }
 }
