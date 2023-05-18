@@ -43,7 +43,7 @@
                     <th:block th:text="${contact.description}"></th:block>
                 </div>
                 <div class="container mt-3">
-                    <button class="btn btn-danger btn-sm">Delete</button>
+                    <button th:onclick="|deleteContact(${contact.cId})|" class="btn btn-danger btn-sm">Delete</button>
                     <button class="btn btn-success btn-sm">Update</button>
                 </div>
             </div>
