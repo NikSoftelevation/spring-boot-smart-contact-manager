@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -162,5 +161,17 @@ public class UserController {
             session.setAttribute("message", new Message("Contact Deleted Successfully", "success"));
         }
         return "redirect:/user/show-Contacts/0";
+    }
+
+    //update contact
+    @PostMapping("/update-contact/{cId}")
+    public String updateForm(@PathVariable("cId") int cId, Model model) {
+
+        model.addAttribute("title", "Update Contact");
+
+        Contact contact = contactRepository.findById(cId).get();
+        model.addAttribute("contact", contact);
+
+        return "normal/update_form";
     }
 }
