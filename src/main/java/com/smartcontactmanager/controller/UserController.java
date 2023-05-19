@@ -6,6 +6,7 @@ import com.smartcontactmanager.helper.Message;
 import com.smartcontactmanager.repository.ContactRepository;
 import com.smartcontactmanager.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.apache.coyote.http11.upgrade.UpgradeProcessorInternal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -146,21 +147,28 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{cId}")
+    @Transactional
     public String deleteContact(@PathVariable("cId") int cId, HttpSession session, Principal principal) {
 
         Contact contact = contactRepository.findById(cId).get();
 
-        //performing check
+       /* //performing check
         String userName = principal.getName();
 
         User user = userRepository.getUserByUserName(userName);
 
         if (user.getId() == contact.getUser().getId()) {
             contact.setUser(null);
-            contactRepository.delete(contact);
+            contactRepository.delete(contact);*/
 
-            session.setAttribute("message", new Message("Contact Deleted Successfully", "success"));
-        }
+        User user = userRepository.getUserByUserName(principal.getName());
+
+        user.getContacts().remove(contact);
+
+        userRepository.save(user);
+
+        session.setAttribute("message", new Message("Contact Deleted Successfully", "success"));
+
         return "redirect:/user/show-Contacts/0";
     }
 
