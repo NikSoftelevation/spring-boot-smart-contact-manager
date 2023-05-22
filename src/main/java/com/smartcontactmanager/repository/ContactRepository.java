@@ -1,7 +1,7 @@
 package com.smartcontactmanager.repository;
 
 import com.smartcontactmanager.domain.Contact;
-import org.hibernate.validator.constraints.ParameterScriptAssert;
+import com.smartcontactmanager.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +16,7 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
     //pagination
     @Query("from Contact as c where c.user.id=:userId")
     public Page<Contact> findContactsByUser(@Param(("userId")) int userId, Pageable pageable);
+
+    //search
+    public List<Contact> findByNameContainingAndUser(String cName, User user);
 }
