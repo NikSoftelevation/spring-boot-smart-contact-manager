@@ -9,14 +9,18 @@ import java.util.Properties;
 
 @Service
 public class EmailService {
-
+    /*String to = "bhardwajnikhil0777@mail.com";
+    String from = "nikhil.softelevation@gmail.com";
+    String subject = "Smart Contact Manager Confirmation";
+    String message = "Hello ! This message is for security check";
+*/
     public boolean sendEmail(String subject, String message, String to) {
 
         boolean f = false;
 
         String from = "nikhil.softelevation@gmail.com";
 
-        /*Variable for gmail*/
+        /*Variable(host) for gmail*/
         String host = "smtp.gmail.com";
 
         /*get the system properties*/
@@ -29,6 +33,7 @@ public class EmailService {
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", "465");
         properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.auth", "true");
 
         /*Step 1: To get the session object*/
         Session session = Session.getInstance(properties, new Authenticator() {
@@ -38,7 +43,7 @@ public class EmailService {
             }
         });
         session.setDebug(true);
-        /*Step 2: Compose the message [text,multi media]*/
+        /*Step 2: Compose the message [text,multi-media]*/
         MimeMessage m = new MimeMessage(session);
 
         try {
@@ -52,7 +57,8 @@ public class EmailService {
             m.setSubject(subject);
 
             /*Adding Text to message*/
-            m.setText(message);
+            //m.setText(message);
+            m.setContent(message, "text/html");
 
             /*Send*/
 
