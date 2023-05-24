@@ -6,6 +6,7 @@ import com.smartcontactmanager.repository.UserRepository;
 import com.smartcontactmanager.service.EmailService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,8 @@ import java.util.Random;
 
 @Controller
 public class ForgotController {
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -88,5 +91,16 @@ public class ForgotController {
             session.setAttribute("message", new Message("You have entered wrong otp!!", "danger"));
             return "verify-otp";
         }
+    }
+
+    /*Change password*/
+    @PostMapping("/change-password")
+    public String changePassword(@RequestParam("newpassword") String newpassword, HttpSession session) {
+        String email = (String) session.getAttribute("email");
+        User user = userRepository.getUserByUserName(email);
+        user.setPassword(bCryptPasswordEncoder.encode(newpassword));
+        userRepository.save(user);
+
+        return "redirect:/signIn?change=password changed successfully";
     }
 }
