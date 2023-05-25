@@ -24,6 +24,7 @@ public class Contact {
     private String phone;
     private String image;
     private String description;
+
     @ManyToOne
     @JsonIgnore
     private User user;

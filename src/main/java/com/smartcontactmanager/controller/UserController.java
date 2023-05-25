@@ -1,13 +1,14 @@
 package com.smartcontactmanager.controller;
 
-import com.razorpay.OrderClient.*;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import com.smartcontactmanager.domain.Contact;
+import com.smartcontactmanager.domain.MyOrder;
 import com.smartcontactmanager.domain.User;
 import com.smartcontactmanager.helper.Message;
 import com.smartcontactmanager.repository.ContactRepository;
+import com.smartcontactmanager.repository.MyOrderRepository;
 import com.smartcontactmanager.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +36,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+    @Autowired
+    private MyOrderRepository myOrderRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -275,7 +279,7 @@ public class UserController {
 
     /*Creating order for payment*/
     @PostMapping("/create_order")
-    public String createOrder(@RequestBody Map<String, Object> data) throws RazorpayException {
+    public String createOrder(@RequestBody Map<String, Object> data, Principal principal) throws RazorpayException {
 
         int amt = Integer.parseInt(data.get("amount").toString());
 
@@ -288,9 +292,33 @@ public class UserController {
         ob.put("currency", "txn_235425");
 
         /*Creating new order*/
-
         Order order = client.orders.create(ob);
+        System.out.println(order);
 
+        /*Save the Order in Database*/
+        MyOrder myOrder = new MyOrder();
+        myOrder.setAmount(order.get("amount"));
+        myOrder.setOrderId(order.get("order_id"));
+        myOrder.setPaymentId(null);
+        myOrder.setStatus("created");
+        myOrder.setReceipt(order.get("receipt"));
+        myOrder.setUser(userRepository.getUserByUserName(principal.getName()));
+
+        myOrderRepository.save(myOrder);
+
+        myOrderRepository.save(myOrder);
         return order.toString();
+    }
+
+    @PostMapping("/update_order")
+    public ResponseEntity<?> updateOrder(@RequestBody Map<String, Object> data) {
+
+        MyOrder myOrder = myOrderRepository.findByOrderId(data.get("order_id").toString());
+        myOrder.setPaymentId(data.get("payment_id").toString());
+        myOrder.setStatus(data.get("status").toString());
+
+        myOrderRepository.save(myOrder);
+
+        return ResponseEntity.ok(Map.of("msg", "updated"));
     }
 }
