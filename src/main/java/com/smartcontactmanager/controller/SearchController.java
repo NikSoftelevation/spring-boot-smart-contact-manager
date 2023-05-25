@@ -4,6 +4,7 @@ import com.smartcontactmanager.domain.Contact;
 import com.smartcontactmanager.domain.User;
 import com.smartcontactmanager.repository.ContactRepository;
 import com.smartcontactmanager.repository.UserRepository;
+import org.json.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,8 @@ public class SearchController {
 
         User user = userRepository.getUserByUserName(principal.getName());
 
-        List<Contact> contacts = contactRepository.findByNameContainingAndUser(query, user);
-        return new ResponseEntity<>(contacts, HttpStatus.OK);
+        /*List<Contact> contacts = contactRepository.findByNameContainingAndUser(query, user);
+        return new ResponseEntity<>(contacts, HttpStatus.OK);*/
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

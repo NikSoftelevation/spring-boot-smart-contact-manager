@@ -1,5 +1,9 @@
 package com.smartcontactmanager.controller;
 
+import com.razorpay.OrderClient.*;
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 import com.smartcontactmanager.domain.Contact;
 import com.smartcontactmanager.domain.User;
 import com.smartcontactmanager.helper.Message;
@@ -7,6 +11,7 @@ import com.smartcontactmanager.repository.ContactRepository;
 import com.smartcontactmanager.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
@@ -24,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -265,5 +271,26 @@ public class UserController {
             return "redirect:/user/settings";
         }
         return "redirect:/user/index";
+    }
+
+    /*Creating order for payment*/
+    @PostMapping("/create_order")
+    public String createOrder(@RequestBody Map<String, Object> data) throws RazorpayException {
+
+        int amt = Integer.parseInt(data.get("amount").toString());
+
+        var client = new RazorpayClient("rzp_test_s1pHgaw6f5DjxP", "n8D0Dqrqqxe0UI2p53CtbIU0");
+
+        JSONObject ob = new JSONObject();
+        ob.put("amount", amt * 100);
+        ob.put("currency", "INR");
+        ob.put("receipt", "INR");
+        ob.put("currency", "txn_235425");
+
+        /*Creating new order*/
+
+        Order order = client.orders.create(ob);
+
+        return order.toString();
     }
 }
